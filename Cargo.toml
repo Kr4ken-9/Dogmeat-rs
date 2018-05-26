@@ -1,0 +1,11 @@
+[package]
+name = "Dogmeat-rs"
+version = "0.1.0"
+authors = ["Kr4ken-9 <kr4kenkt@gmail.com>"]
+
+[dependencies]
+serenity = "0.5"
+
+[[bin]]
+name = "Dogmeat-rs"
+path = "main.rs"
