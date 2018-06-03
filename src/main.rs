@@ -8,6 +8,7 @@ use serenity::framework::standard::StandardFramework;
 use std::io;
 
 mod config;
+mod commands;
 
 struct Handler;
 
@@ -23,23 +24,25 @@ fn main() {
 
         token.pop(); // Input has a trailing newline, this removes it
         let config = config::Config {
-            token: token
+            token
         };
         config::save_config(String::from("../config.toml"), config);
     }
 
     let config = config::load_config(String::from("../config.toml"));
 
-    // Login with a bot token from the environment
+    // Login with a bot token from the config
     let mut client = Client::new(&config.token, Handler)
         .expect("Error creating client");
     client.with_framework(StandardFramework::new()
         .configure(|c| c.prefix("~")) // set the bot's prefix to "~"
-        .cmd("ping", ping));
+        .cmd("ping", ping)
+        .cmd("ban", commands::ban::ban));
 
     // start listening for events by starting a single shard
-    if let Err(why) = client.start() {
-        println!("An error occurred while running the client: {:?}", why);
+    match client.start() {
+        Err(why) => println!("An error occurred while running the client: {:?}", why),
+        Ok(asdf) => println!("Client connected successfully!"),
     }
 }
 
